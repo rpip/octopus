@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Emacs
+.#*
+\#*#
+*~
+
+# bower
+bower_components/
+
+# vendor lib
+lib/
