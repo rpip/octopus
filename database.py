@@ -6,9 +6,9 @@ from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
 
-CLOUDSQL_PROJECT = os.getenv('OCTOPUS_PROJECT')
-CLOUDSQL_INSTANCE = os.getenv('OCTOPUS_SQLINSTANCE')
-DB_NAME = os.getenv('OCTOPUS_DBNAME')
+CLOUDSQL_PROJECT = 'octopus-1340'
+CLOUDSQL_INSTANCE = 'octopus'
+DB_NAME = 'octopus'
 
 PK_KEY_SALT = os.getenv('OCTOPUS_SALT', '123456')
 
