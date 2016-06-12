@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<form action="{{ request.path }}" method="get">
+  {% if error %}
+  <div class="alert alert-danger" role="alert">
+    <strong>Oh snap!</strong> {{error}}
+  </div>
+  {% end %}
+
+  <fieldset class="form-group">
+    <label for="url">Enter url to genrate worldcloud</label>
+    <input type="text" class="form-control" id="url" name="url"
+           placeholder="Enter url...">
+  </fieldset>
+  <p><input type="submit" class="btn btn-lg btn-primary" href="#" role="button"/></p>
+  {% module xsrf_form_html() %}
+</form>
+
+<div class="wordcloud">
+  {% for (word, size) in wordcloud %}
+  <span class="wc size-{{size}}">{{word}}</span>
+  {% end %}
+</div>
+
+<div class="row marketing wordcloud">
+</div>
+{% end %}

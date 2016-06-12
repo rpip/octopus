@@ -10,5 +10,8 @@ __pycache__/
 # bower
 bower_components/
 
-# vendor lib
+# Python vendor lib
 lib/
+
+# do not static vendor
+static/vendor/
