@@ -7,11 +7,5 @@ __pycache__/
 \#*#
 *~
 
-# bower
-bower_components/
-
 # Python vendor lib
 lib/
-
-# do not static vendor
-static/vendor/
