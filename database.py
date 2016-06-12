@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import hashlib
 
 from sqlalchemy import create_engine, Column, String, Integer, DateTime
 from sqlalchemy.orm import sessionmaker, scoped_session
@@ -8,6 +9,8 @@ from sqlalchemy.ext.declarative import declarative_base
 CLOUDSQL_PROJECT = os.getenv('OCTOPUS_PROJECT')
 CLOUDSQL_INSTANCE = os.getenv('OCTOPUS_SQLINSTANCE')
 DB_NAME = os.getenv('OCTOPUS_DBNAME')
+
+PK_KEY_SALT = os.getenv('OCTOPUS_SALT', '123456')
 
 Base = declarative_base()
 
@@ -31,15 +34,25 @@ class WordCount(Base):
     created_at = Column(DateTime, nullable=False, default=datetime.now())
     updated_at = Column(DateTime, nullable=False, default=datetime.now())
 
-    def __init__(self, word, count):
+    def __init__(self, word, count, uuid):
         # TODO: hash uuid and encrypt/decrypt word
-        self.uuid = word
+        self.uuid = uuid or self._generate_uuid(word)
         self.word = word
         self.count = count
+
+    @classmethod
+    def generate_uuid(cls, word):
+        """Generates a unique ID as primary key from the given word"""
+        m = hashlib.sha1()
+        m.update(PK_KEY_SALT)
+        m.update(word)
+        return m.hexdigest()
 
 
 def init_db():
     "Initializes the database and creates the tables"
     engine = create_engine(db_url())
     Base.metadata.create_all(bind=engine)
-    return scoped_session(sessionmaker(bind=engine))
+    return scoped_session(sessionmaker(bind=engine,
+                          autocommit=False,
+                          autoflush=True))

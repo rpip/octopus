@@ -1,47 +1,83 @@
+# -*- coding: utf-8 -*-
+"""Main web app"""
 import os
 import uuid
+import urllib2
 
-# from bs4 import BeautifulSoup, Comment
 import tornado.wsgi
 from tornado.web import url
 
+from wordcloud import WordCloud
 import database
+from database import WordCount
+
+DB = database.init_db()
 
 
-class BaseHandler(tornado.web.RequestHandler):
-    @property
-    def db(self):
-        return self.application.db
+def fix_url(url):
+    """Ensure's url is prefixed with 'http' or 'https'.
+
+    Adds the prefix is it's missing
+    """
+    if url.startswith('http') or url.startswith('https://'):
+        return url
+    else:
+        return 'http://' + url
 
 
-class HomeHandler(BaseHandler):
+def save_wordcloud(wordcloud):
+    """Insert new word count record or update count if it already exists"""
+    for word, count in wordcloud:
+        w_hash = WordCount.generate_uuid(word)
+        found_wc = DB.query(WordCount).get(w_hash)
+        if found_wc:
+            # update the count
+            found_wc.count += count
+            DB.commit()
+        else:
+            word_count = WordCount(uuid=w_hash, word=word, count=count)
+            DB.add(word_count)
+            DB.commit()
+
+
+class HomeHandler(tornado.web.RequestHandler):
     def get(self):
-        self.write('Hello')
+        wordcloud = {}
+        url = self.get_argument("url", None)
+        error = None
+        if url is not None:
+            try:
+                frequencies, wordcloud = WordCloud().generate(fix_url(url))
+                # save the original word count
+                save_wordcloud(frequencies)
+            except (IOError, urllib2.URLError, ValueError):
+                error = "Seems the URL is incorrect. Please try again"
+            except Exception, err:
+                # TODO: log the error
+                error = "Something went wrong... {}".format(err.message)
+
+        self.render('home.html', url=url, wordcloud=wordcloud, error=error)
 
 
-class AdminHandler(BaseHandler):
-    pass
+class AdminHandler(tornado.web.RequestHandler):
+    def get(self):
+        word_cloud = DB.query(WordCount).all()
+        self.render("admin.html", word_cloud=word_cloud)
 
 
-class Application(tornado.web.Application):
-    def __init__(self):
-        handlers = [
+settings = dict(
+    title='Octopus WordCloud',
+    template_path=os.path.join(os.path.dirname(__file__), 'templates'),
+    xsrf_cookies=True,
+    keyfile=os.getenv('OCTOPUS_KEY'),
+    cookie_secret=uuid.uuid4()
+)
+
+application = tornado.web.Application([
             url(r'/', HomeHandler, name='index'),
             url(r'/admin', AdminHandler, name='admin')
-        ]
-
-        settings = dict(
-            title='Octopus Word Count',
-            static_path=os.path.join(os.path.dirname(__file__), 'static'),
-            template_path=os.path.join(os.path.dirname(__file__), 'templates'),
-            xsrf_cookies=True,
-            salt=os.getenv('OCTOPUS_SALT', '123456'),
-            keyfile=os.getenv('OCTOPUS_KEY'),
-            cookie_secret=uuid.uuid4()
-        )
-        tornado.web.Application.__init__(self, handlers, **settings)
-        # self.db = database.init_db()
+        ], **settings)
 
 
 # init app
-application = tornado.wsgi.WSGIAdapter(Application())
+application = tornado.wsgi.WSGIAdapter(application)

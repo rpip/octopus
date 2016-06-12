@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block body %}
+  <table class="table">
+  <thead class="thead-default">
+    <tr>
+      <th>#</th>
+      <th>Primary key</th>
+      <th>Word</th>
+      <th>Count</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for index, wc in enumerate(word_cloud) %}
+    <tr>
+      <th scope="row">{{ index }}</th>
+      <td>{{ wc.uuid }}</td>
+      <td>{{ wc.word }}</td>
+      <td>{{ wc.count }}</td>
+    </tr>
+    {% end %}
+  </tbody>
+</table>
+
+{% end %}
