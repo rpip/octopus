@@ -3,6 +3,7 @@
 import os
 import uuid
 import urllib2
+import logging
 
 import tornado.wsgi
 from tornado.web import url
@@ -52,9 +53,10 @@ class HomeHandler(tornado.web.RequestHandler):
                 save_wordcloud(frequencies)
             except (IOError, urllib2.URLError, ValueError):
                 error = "Seems the URL is incorrect. Please try again"
-            except Exception, err:
-                # TODO: log the error
-                error = "Something went wrong... {}".format(err.message)
+            except Exception as _err:
+                error = "Something went wrong..."
+                # log the error
+                logging.exception(error)
 
         self.render('home.html', url=url, wordcloud=wordcloud, error=error)
 
