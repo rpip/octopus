@@ -66,7 +66,7 @@ class AdminHandler(tornado.web.RequestHandler):
 
 
 settings = dict(
-    title='Octopus WordCloud',
+    title=u'Octopus Word Cloud',
     template_path=os.path.join(os.path.dirname(__file__), 'templates'),
     xsrf_cookies=True,
     keyfile=os.getenv('OCTOPUS_KEY'),

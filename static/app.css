@@ -55,56 +55,6 @@ body {
   }
 }
 
-/*
-.size-1 {
-    font-size: 7pt;
-    color: #808080;
-}
-
-.size-2 {
-  font-size: 14pt;
-}
-
-.size-3 {
-    font-size: 18pt;
-    color: #FFA500;
-}
-
-.size-4 {
-    font-size: 24pt;
-    color: #87CEFA;
-}
-
-.size-5 {
-    font-size: 30pt;
-    color: #40E0D0;
-}
-
-.size-6 {
-    font-size: 36pt;
-    color: #AF002A;
-}
-
-.size-7 {
-    font-size: 42pt;
-    color: #483D8B;
-}
-
-.size-8 {
-    font-size: 48pt;
-    color: #F2F0E6;
-}
-
-.size-9 {
-    font-size: 54pt;
-    color: ##6495ED;
-}
-
-.size-10 {
-    font-size: 60pt;
-    color: #72A0C1;
-}
-*/
 
 .wc {
     padding: 5px;
@@ -119,31 +69,31 @@ body {
 }
 
 .size-3 {
-    font-size: 18pt;
+    font-size: 21pt;
 }
 
 .size-4 {
-    font-size: 24pt;
+    font-size: 28pt;
 }
 
 .size-5 {
-    font-size: 30pt;
+    font-size: 35pt;
 }
 
 .size-6 {
-    font-size: 36pt;
-}
-
-.size-7 {
     font-size: 42pt;
 }
 
+.size-7 {
+    font-size: 49pt;
+}
+
 .size-8 {
-    font-size: 48pt;
+    font-size: 56pt;
 }
 
 .size-9 {
-    font-size: 54pt;
+    font-size: 63pt;
 }
 
 .size-10 {
