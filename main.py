@@ -29,7 +29,7 @@ def fix_url(url):
 def save_wordcloud(wordcloud):
     """Insert new word count record or update count if it already exists"""
     for word, count in wordcloud:
-        w_hash = WordCount.generate_uuid(word)
+        w_hash = database.generate_uuid(word)
         found_wc = DB.query(WordCount).get(w_hash)
         if found_wc:
             # update the count

@@ -24,6 +24,14 @@ def db_url():
         return 'mysql+mysqldb://root:@localhost/octopus'.format(DB_NAME)
 
 
+def generate_uuid(word):
+    """Generates a unique ID as primary key from the given word"""
+    m = hashlib.sha1()
+    m.update(PK_KEY_SALT)
+    m.update(word)
+    return m.hexdigest()
+
+
 class WordCount(Base):
 
     __tablename__ = 'wordcount'
@@ -36,17 +44,9 @@ class WordCount(Base):
 
     def __init__(self, word, count, uuid):
         # TODO: hash uuid and encrypt/decrypt word
-        self.uuid = uuid or self._generate_uuid(word)
+        self.uuid = uuid or generate_uuid(word)
         self.word = word
         self.count = count
-
-    @classmethod
-    def generate_uuid(cls, word):
-        """Generates a unique ID as primary key from the given word"""
-        m = hashlib.sha1()
-        m.update(PK_KEY_SALT)
-        m.update(word)
-        return m.hexdigest()
 
 
 def init_db():
