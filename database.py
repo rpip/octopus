@@ -18,10 +18,10 @@ Base = declarative_base()
 def db_url():
     if (os.getenv('SERVER_SOFTWARE') and
             os.getenv('SERVER_SOFTWARE').startswith('Google App Engine/')):
-        return 'mysql+mysqldb://root@/%s?unix_socket=/cloudsql/%s:%s'.format(
-            DB_NAME, CLOUDSQL_PROJECT, CLOUDSQL_INSTANCE)
+        _url = 'mysql+mysqldb://root@/{0}?unix_socket=/cloudsql/{1}:{2}'
+        return _url.format(DB_NAME, CLOUDSQL_PROJECT, CLOUDSQL_INSTANCE)
     else:
-        return 'mysql+mysqldb://root:@localhost/octopus'.format(DB_NAME)
+        return 'mysql+mysqldb://root:@localhost/{0}'.format(DB_NAME)
 
 
 def generate_uuid(word):
