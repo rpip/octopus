@@ -39,7 +39,7 @@ Note
 
 TODO
 ------
-- [] Deploy app
+- [x] Deploy app
 - [] Handle redirects
 - [] Encrypt/decrypt word saved in the DB
 - [] Write unit tests for wordcloud.WordCloud
