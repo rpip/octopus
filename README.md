@@ -13,6 +13,7 @@ $ git clone https://github.com/rpip/octopus
 $ cd octopus
 $ # install deps
 $ pip install -t lib -r requirements.txt
+$ # set DB config vars in app.yaml. Defaults to 'root' as user 'localhost' as host
 $ dev_appserver.py .
 ```
 

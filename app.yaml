@@ -4,6 +4,10 @@ runtime: python27
 api_version: 1
 threadsafe: yes
 
+env_variables:
+  MYSQL_USER: root
+  MYSQL_HOST: localhost
+
 handlers:
 - url: /static/
   static_dir: static

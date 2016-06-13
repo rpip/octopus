@@ -24,6 +24,8 @@ RSA_PUBLIC_KEY = RSA_KEY.publickey()
 CLOUDSQL_PROJECT = 'octopus-1340'
 CLOUDSQL_INSTANCE = 'octopus'
 DB_NAME = 'octopus'
+DB_USER = os.getenv('MYSQL_USER')
+DB_HOST = os.getenv('MYSQL_HOST')
 
 Base = declarative_base()
 
@@ -31,10 +33,11 @@ Base = declarative_base()
 def db_url():
     if (os.getenv('SERVER_SOFTWARE') and
             os.getenv('SERVER_SOFTWARE').startswith('Google App Engine/')):
-        _url = 'mysql+mysqldb://root@/{0}?unix_socket=/cloudsql/{1}:{2}'
-        return _url.format(DB_NAME, CLOUDSQL_PROJECT, CLOUDSQL_INSTANCE)
+        _url = 'mysql+mysqldb://{0}@/{1}?unix_socket=/cloudsql/{2}:{3}'
+        return _url.format(DB_USER, DB_NAME, CLOUDSQL_PROJECT,
+                           CLOUDSQL_INSTANCE)
     else:
-        return 'mysql+mysqldb://root:@localhost/{0}'.format(DB_NAME)
+        return 'mysql+mysqldb://{0}:@{1}/{2}'.format(DB_USER, DB_HOST, DB_NAME)
 
 
 def generate_uuid(word):
