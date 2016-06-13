@@ -10,6 +10,7 @@ from tornado.web import url
 
 from wordcloud import WordCloud
 import database
+from sqlalchemy import desc
 from database import WordCount
 
 DB = database.init_db()
@@ -20,7 +21,7 @@ def fix_url(url):
 
     Adds the prefix is it's missing
     """
-    if url.startswith('http') or url.startswith('https://'):
+    if url.startswith('http://') or url.startswith('https://'):
         return url
     else:
         return 'http://' + url
@@ -63,7 +64,7 @@ class HomeHandler(tornado.web.RequestHandler):
 
 class AdminHandler(tornado.web.RequestHandler):
     def get(self):
-        word_cloud = DB.query(WordCount).all()
+        word_cloud = DB.query(WordCount).order_by(desc('count')).all()
         self.render("admin.html", word_cloud=word_cloud)
 
 

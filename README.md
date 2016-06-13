@@ -37,11 +37,19 @@ Note
 
 - Include digits in the word count?
 
+Screenshots
+------------
+
+![Home](./home.png)
+
+![Admin](./admin.png)
+
+
 
 TODO
 ------
 - [x] Deploy app
-- [] Handle redirects
+- [] Handle HTTP redirects
 - [x] Encrypt/decrypt word saved in the DB
 - [] Write unit tests for wordcloud.WordCloud
 - [] Setup TravisCI
