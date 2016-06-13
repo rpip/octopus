@@ -1,16 +1,29 @@
 import os
-from datetime import datetime
 import hashlib
+from base64 import b64encode
+from datetime import datetime
 
-from sqlalchemy import create_engine, Column, String, Integer, DateTime
+from sqlalchemy import (
+    create_engine, Column, String, Integer,
+    DateTime, LargeBinary
+)
 from sqlalchemy.orm import sessionmaker, scoped_session
 from sqlalchemy.ext.declarative import declarative_base
+from Crypto.PublicKey import RSA
 
+PK_KEY_SALT = os.getenv('OCTOPUS_SALT',
+                        b64encode(os.urandom(64)).decode('utf-8'))
+
+# asymmetric encrytion
+RSA_KEYFILE = os.path.join(os.path.dirname(__file__), 'rsakeyfile')
+RSA_KEY = RSA.importKey(open(RSA_KEYFILE, 'r').read())
+RSA_PUBLIC_KEY = RSA_KEY.publickey()
+
+
+# GAE CloudSQL
 CLOUDSQL_PROJECT = 'octopus-1340'
 CLOUDSQL_INSTANCE = 'octopus'
 DB_NAME = 'octopus'
-
-PK_KEY_SALT = os.getenv('OCTOPUS_SALT', '123456')
 
 Base = declarative_base()
 
@@ -37,7 +50,7 @@ class WordCount(Base):
     __tablename__ = 'wordcount'
 
     uuid = Column(String(255), primary_key=True)
-    word = Column(String(255), nullable=False)
+    word = Column(LargeBinary(), nullable=False)
     count = Column(Integer, nullable=False)
     created_at = Column(DateTime, nullable=False, default=datetime.now())
     updated_at = Column(DateTime, nullable=False, default=datetime.now())
@@ -45,8 +58,18 @@ class WordCount(Base):
     def __init__(self, word, count, uuid):
         # TODO: hash uuid and encrypt/decrypt word
         self.uuid = uuid or generate_uuid(word)
-        self.word = word
+        self.word = self._encrypt(word)
         self.count = count
+
+    def _encrypt(self, word):
+        return RSA_PUBLIC_KEY.encrypt(str(word), 32)[0]
+
+    def _decrypt(self):
+        return RSA_KEY.decrypt(self.word)
+
+    @property
+    def as_raw(self):
+        return self._decrypt()
 
 
 def init_db():

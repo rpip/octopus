@@ -1,3 +1,5 @@
+/* Copyright (C) 2016, Twitter Bootstrap */
+
 /* Space out content a bit */
 body {
   padding-top: 1.5rem;
@@ -60,6 +62,7 @@ body {
     padding: 5px;
 }
 
+/* adjust sizes of the words in the clouds accordingly */
 .size-1 {
     font-size: 7pt;
 }

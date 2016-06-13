@@ -9,3 +9,5 @@ __pycache__/
 
 # Python vendor lib
 lib/
+
+rsakeyfile.pub
