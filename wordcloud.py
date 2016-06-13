@@ -21,7 +21,7 @@ class WordCloud(object):
         regexp: A string specifying the regex for tokenizing the text.
 
     >>> from wordcloud import WordCloud
-    >>> wc = WordCloud().generate("http://www.octopuslabs.com/")
+    >>> frequencies, wc = WordCloud().generate("http://www.octopuslabs.com/")
     """
     def __init__(self, max_words=100, regexp=r"\w+[\w']+"):
         """Inits WordCloud with word limit and regex for tokenizing text"""
