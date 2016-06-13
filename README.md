@@ -32,7 +32,7 @@ frequencies, word_cloud = WordCloud().generate('http://fsf.org')
 Note
 ------
 
-- Follow the [Twelve-Factor App](http://12factor.net/config) methodology and use environment variables for the configs. There's a way to set the system environment variables using `appcfg.py -E OCTOPUS_KEYFILE:keyfile, OCTOPUS_DEBUG:True`. This is consistent with the 12-Factor App methodology which recommends storing configs as system environment variables. This works for simple services, especially when isolation of the services is desired. In other cases, we can use a `.env` file, or a service like etcd or Consul to share and manage configs. And to automate all of this, we can use Ansible.
+- Follow the [Twelve-Factor App](http://12factor.net/config) methodology and use environment variables for the configs. There's a way to set the system environment variables using `appcfg.py -E OCTOPUS_KEYFILE:keyfile, OCTOPUS_DEBUG:True`. This is consistent with the 12-Factor App methodology which recommends storing configs as system environment variables. This can be combined with Ansible to update or set the `env_variables` in `app.yaml`.
 
 - The asymmetrical encryption uses an RSA key file with the pycrypto RSA tools. I think this offers better security than the DES/ECB approach but  it’s more computationally expensive. I store the encrypted data as binary in the database, and on read, I decrypt it. I tried some compression algorithms like zlib and bzip to reduce the size of the encrypted word but the results were not encouraging. But for now this works. We are able to to securely encrypt and decrypt the words.
 
