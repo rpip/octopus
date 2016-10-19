@@ -1,4 +1,4 @@
-Octopus
+WordCloud
 ==========
 
 Word cloud generator that runs on Google App Engine using MySQLdb and Tornado.
@@ -9,8 +9,8 @@ Installation
 First install the [Google App Engine Python SDK](https://cloud.google.com/appengine/downloads#Google_App_Engine_SDK_for_Python).
 
 ```bash
-$ git clone https://github.com/rpip/octopus
-$ cd octopus
+$ git clone https://github.com/rpip/wordcloud
+$ cd wordcloud
 $ # install deps
 $ pip install -t lib -r requirements.txt
 $ # set DB config vars in app.yaml. Defaults to 'root' as user 'localhost' as host
